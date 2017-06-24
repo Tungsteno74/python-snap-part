@@ -1,0 +1,28 @@
+name: python
+version: '0.1'
+summary: Build any version of Python.
+description: |
+  This snapcraft part allows to build programs with any version of Python.
+  Usage:
+    Add "after: [python]" to your part written in python. By default, this will use the latest Python
+    from the master branch to compile your program.
+    If you want to specify a Python version, also add a Python part with the version as
+    the source-tag value. For example, to use Python 2.7.2, use:
+      parts:
+        my-python-program:
+          ...
+          after: [python]
+        python:
+          source-tag: v2.7.2
+confinement: strict
+
+parts:
+  python:
+    plugin: autotools
+    source: https://github.com/python/cpython.git #work with python version 2.7.5 and later (raise "IOError invalid Python installation unable to open /snap/httpstat/x1/usr/include/python2.7/pyconfig.h (No such file or directory)" with 2.7.4 and earlier)
+    source-type: git    
+    configflags: [--prefix=/usr]
+    build-packages: [libssl-dev]
+    stage-packages: [curl]
+    #prime:
+     # - -usr/include #python 2.7.4 and earlier work well without that line (seem work well without above 2.7.4 too)
